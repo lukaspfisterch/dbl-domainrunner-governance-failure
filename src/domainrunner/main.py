@@ -1,6 +1,8 @@
 """Domainrunner Entrypoint."""
 import sys
 import time
+import os
+
 
 from domainrunner.client import GatewayClient
 from domainrunner.observer_client import ObserverClient
@@ -11,6 +13,7 @@ from domainrunner.visualizer import (
     print_gateway_unreachable,
     print_observer_unavailable,
 )
+from domainrunner.proof_renderer import save_proof
 
 
 def main():
@@ -42,6 +45,12 @@ def main():
         try:
             result = scenario.run()
             render_scenario_result(result)
+            
+            # Generate Proof
+            proof_file = save_proof(result)
+            if proof_file:
+                from rich.console import Console
+                Console().print(f"📄 [dim]Governance Proof generated:[/dim] [bold blue link=file:///{os.path.abspath(proof_file)}]{proof_file}[/]")
         except Exception as e:
             # Fallback if scenario code crashes
             from rich.console import Console
