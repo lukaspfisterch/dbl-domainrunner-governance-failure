@@ -40,18 +40,27 @@ class GatewayClient:
         
         Returns the gateway response (usually 202 Accepted with correlation info).
         """
-        payload = {
-            "thread_id": thread_id,
-            "turn_id": turn_id or f"turn-{uuid.uuid4().hex[:8]}",
-            "actor": actor,
-            "intent_type": "chat.message",
+        correlation_id = uuid.uuid4().hex
+        
+        # Proper IntentEnvelope structure required by dbl-gateway
+        envelope = {
+            "interface_version": 2,
+            "correlation_id": correlation_id,
             "payload": {
-                "message": message,
+                "stream_id": "default",
+                "lane": "default",
+                "actor": actor,
+                "intent_type": "chat.message",
+                "thread_id": thread_id,
+                "turn_id": turn_id or f"turn-{uuid.uuid4().hex[:8]}",
+                "payload": {
+                    "message": message,
+                },
             },
         }
         
         with httpx.Client(timeout=10.0) as client:
-            resp = client.post(f"{self.base_url}/ingress/intent", json=payload)
+            resp = client.post(f"{self.base_url}/ingress/intent", json=envelope)
             resp.raise_for_status()
             return resp.json()
 

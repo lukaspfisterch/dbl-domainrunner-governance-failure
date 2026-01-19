@@ -68,15 +68,15 @@ Demonstrate, in a reproducible and concrete way, why AI governance fails even wi
 
 ### Run Demo
 
-```powershell
-cd dbl-domainrunner-governance-failure
+1. **Start Bridge** (Background service to sync Gateway → Observer)
+   ```powershell
+   start python -m domainrunner.bridge
+   ```
 
-# Install
-pip install -e .
-
-# Run all Phase 1 scenarios
-python -m domainrunner
-```
+2. **Run Scenarios**
+   ```powershell
+   python -m domainrunner
+   ```
 
 ### Expected Output
 
