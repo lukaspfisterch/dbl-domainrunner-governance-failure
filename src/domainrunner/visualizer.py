@@ -18,7 +18,9 @@ console = Console()
 
 def render_scenario_result(result: dict[str, Any]) -> None:
     """Render a complete scenario result with all panels."""
-    scenario = result.get("scenario", "unknown")
+    # Support both old and new field names
+    scenario = result.get("scenario_title", result.get("scenario", "unknown"))
+    subtitle = result.get("scenario_subtitle", "")
     thread_id = result.get("thread_id", "unknown")
     events = result.get("events", [])
     projection = result.get("projection")
@@ -28,6 +30,8 @@ def render_scenario_result(result: dict[str, Any]) -> None:
     # Header
     console.print()
     console.rule(f"[bold blue]Scenario: {scenario}[/]")
+    if subtitle:
+        console.print(f"[dim italic]{subtitle}[/]", justify="center")
     console.print(f"[dim]Thread: {thread_id}[/]")
     console.print()
 
@@ -112,17 +116,21 @@ def _render_projection(projection: dict[str, Any]) -> None:
     if turns:
         text.append(f"\nTurns: {len(turns)}")
 
-    console.print(Panel(text, title="PROJECTION (Observer /threads/{id})", border_style="green"))
+    console.print(Panel(text, 
+                        title="PROJECTION (Observer /threads/{id})", 
+                        subtitle="[italic dim]Note: Projections are eventually consistent[/]",
+                        subtitle_align="right",
+                        border_style="green"))
 
 
 def _render_signals(signals: list[dict[str, Any]]) -> None:
     """Render signals (if any)."""
     if not signals:
-        console.print(Panel("[dim](no signals - insufficient data for thresholds)[/]\n[italic dim]These signals do NOT affect decisions. They indicate patterns, not authority.[/]", 
+        console.print(Panel("[dim](no signals - insufficient data for thresholds)[/]\n[italic dim]Aggregated across system, not limited to this thread.[/]", 
                            title="SIGNALS (NON_NORMATIVE)", border_style="yellow"))
         return
 
-    table = Table(title="SIGNALS (NON_NORMATIVE)", box=None, caption="[italic dim]These signals do NOT affect decisions. They indicate patterns, not authority.[/]")
+    table = Table(title="SIGNALS (NON_NORMATIVE)", box=None, caption="[italic dim]Aggregated across system, not limited to this thread.[/]")
     table.add_column("Severity", width=10)
     table.add_column("ID", width=30)
     table.add_column("Title")

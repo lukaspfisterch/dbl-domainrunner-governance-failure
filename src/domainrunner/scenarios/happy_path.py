@@ -39,7 +39,8 @@ def run() -> dict:
     signals = obs.get_signals()
     
     return {
-        "scenario": "happy_path [Policy: ALLOW, Execution: Variable]",
+        "scenario_title": "happy_path",
+        "scenario_subtitle": "Policy decision: ALLOW  |  Execution outcome: VARIABLE",
         "thread_id": thread_id,
         "events": raw_events,
         "projection": projection,

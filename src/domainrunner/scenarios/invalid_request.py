@@ -52,7 +52,8 @@ def run() -> dict:
     signals = obs.get_signals()
     
     return {
-        "scenario": "invalid_request",
+        "scenario_title": "invalid_request",
+        "scenario_subtitle": "Policy decision: ALLOW  |  Execution outcome: ERROR",
         "thread_id": thread_id,
         "events": raw_events,
         "projection": projection,
