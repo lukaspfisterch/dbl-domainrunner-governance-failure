@@ -118,11 +118,11 @@ def _render_projection(projection: dict[str, Any]) -> None:
 def _render_signals(signals: list[dict[str, Any]]) -> None:
     """Render signals (if any)."""
     if not signals:
-        console.print(Panel("[dim](no signals - insufficient data for thresholds)[/]", 
+        console.print(Panel("[dim](no signals - insufficient data for thresholds)[/]\n[italic dim]These signals do NOT affect decisions. They indicate patterns, not authority.[/]", 
                            title="SIGNALS (NON_NORMATIVE)", border_style="yellow"))
         return
 
-    table = Table(title="SIGNALS (NON_NORMATIVE)", box=None)
+    table = Table(title="SIGNALS (NON_NORMATIVE)", box=None, caption="[italic dim]These signals do NOT affect decisions. They indicate patterns, not authority.[/]")
     table.add_column("Severity", width=10)
     table.add_column("ID", width=30)
     table.add_column("Title")
