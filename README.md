@@ -132,7 +132,7 @@ The domainrunner will:
 
 ---
 
-## Why This Matters
+## What This Demonstrates
 
 Without deterministic boundaries, systems report outcomes like:
 - "the AI failed"
